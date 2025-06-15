@@ -8,11 +8,16 @@ async function scrapeNovakDjokovic() {
   });
 
   const page = await browser.newPage();
-  await page.goto('https://www.puntodebreak.com/')
+  await page.goto('https://www.puntodebreak.com')
   await page.click('a[href="/tag/novak-djokovic"]')
   await new Promise (r => setTimeout(r,10000));
-  await browser.close()
+  
+  const result = await page.evaluate(()=> {
+    document.querySelector('h1').innerText
+  })
 
+  console.log(result)
+  await browser.close()
 
 }
 
