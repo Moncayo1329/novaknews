@@ -14,6 +14,7 @@ async function scrapeNovakDjokovic() {
 
 try{
   await page.waitForSelector('article h3', {timeout: 60000});
+  await page.click('article h3 a');
 } catch (err){
   console.error('No se cargo el selector a tiempo',err.message);
   await browser.close();
