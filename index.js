@@ -12,9 +12,13 @@ async function scrapeNovakDjokovic() {
     waitUntil: 'networkidle2',
   });
 
-
-  await page.waitForSelector('article h3')
-
+try{
+  await page.waitForSelector('article h3', {timeout: 60000});
+} catch (err){
+  console.error('No se cargo el selector a tiempo',err.message);
+  await browser.close();
+  return;
+}
 const articles = await page.evaluate(() => {
 const data = [];
 const articlesNodes = document.querySelectorAll('articles');
