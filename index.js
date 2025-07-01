@@ -8,16 +8,39 @@ async function scrapeNovakDjokovic() {
   });
 
   const page = await browser.newPage();
-  await page.goto('https://quotes.toscrape.com')
-  const result = await page.evaluate(() => {
-const quotes = document.querySelectorAll('.quote')
-return quotes
+  await page.goto('https://news.google.com/search?q=novak%20djokovic&hl=es-419&gl=AR&ceid=AR%3Aes-419', {
+    waitUntil: 'networkidle2',
+  });
 
-  })
 
-  console.log(result)
+  await page.waitForSelector('article h3')
 
-  await browser.close()
-}
+const articles = await page.evaluate(() => {
+const data = [];
+const articlesNodes = document.querySelectorAll('articles');
+
+articleNodes.forEach((article) => {
+  const titleElement = article.querySelector('h3');
+  const  linkElement = article.querySelector('a');
+
+  if (titleElement && linkElement) {
+ const title = titleElement.innerText;
+const url = linkElement.href.startsWith('http')
+? linkElement.href
+ : 'https://news.google.com' + linkElement.getAttribute('href').replace('./', '/');
+data.push({ title, url });
+      }
+    });
+
+    return data;
+  });
+
+  console.log('Noticias encontradas:\n', articles);
+
+  await browser.close();
+
+
+
+  }
  
 scrapeNovakDjokovic();
